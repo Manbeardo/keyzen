@@ -1,9 +1,21 @@
-
 var data = {};
-data.qwertychars = " jfkdlsahgyturieowpqbnvmcxz6758493021`-=[]\\;',./ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?"
-data.dvorakchars = " hutenoasdifygpcrlxbkmjwqvz6758493021`-=[]\\;',./ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?"
-data.colemakchars = " ntesiraohdjglpufywqbkvmcxz6758493021`-=[]\\;',./ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?"
-data.chars = data.qwertychars;
+
+var keyboardenum = {
+    qwerty : 0,
+    dvorak : 1,
+    colemak : 2
+}
+
+data.keyboard_chars[keyboard_enum.qwerty] = " jfkdlsahgyturieowpqbnvmcxz6758493021\
+`-=[]\\;',./ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?";
+
+data.keyboard_chars[keyboard_enum.dvorak] = " hutenoasdifygpcrlxbkmjwqvz6758493021\
+`-=[]\\;',./ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?";
+
+data.keyboard_chars[keyboard_enum.colemak] = " ntesiraohdjglpufywqbkvmcxz6758493021\
+`-=[]\\;',./ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?";
+
+data.chars = data.keyboard_chars[data.active_keyboard];
 
 data.consecutive = 10;
 data.word_length = 7;
@@ -15,11 +27,15 @@ $(document).ready(function() {
         render();
     }
     else {
+        set_keyboard(0);
         set_level(1);
     }
     $(document).keypress(keyHandler);
 });
 
+function get_level() {
+    return data.level[data.active_keyboard];    
+}
 
 function set_level(l) {
     data.in_a_row = {};
@@ -27,7 +43,7 @@ function set_level(l) {
         data.in_a_row[data.chars[i]] = data.consecutive;
     }
     data.in_a_row[data.chars[l]] = 0;
-    data.level = l;
+    data.level[data.active_keyboard] = l;
     data.word_index = 0;
     data.word_errors = {};
     data.word = generate_word();
@@ -35,6 +51,10 @@ function set_level(l) {
     render();
 }
 
+function set_keyboard(k) {
+    data.active_keyboard = k;
+    set_level(get_level());
+}
 
 function keyHandler(e) {
     var key = String.fromCharCode(e.which);
@@ -63,10 +83,10 @@ function keyHandler(e) {
 
 
 function level_up() {
-    if (data.level + 1 <= data.chars.length - 1) {
+    if (get_level() + 1 <= data.chars.length - 1) {
         (new Audio('ding.wav')).play();
     }
-    l = Math.min(data.level + 1, data.chars.length);
+    l = Math.min(get_level() + 1, data.chars.length);
     set_level(l);
 }
 
@@ -177,7 +197,7 @@ function generate_word() {
 
 
 function get_level_chars() {
-    return data.chars.slice(0, data.level + 1).split('');
+    return data.chars.slice(0, get_level() + 1).split('');
 }
 
 function get_training_chars() {
