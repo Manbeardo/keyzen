@@ -1,7 +1,10 @@
 
-
 var data = {};
-data.chars = " jfkdlsahgyturieowpqbnvmcxz6758493021`-=[]\\;',./ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?";
+data.qwertychars = " jfkdlsahgyturieowpqbnvmcxz6758493021`-=[]\\;',./ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?"
+data.dvorakchars = " hutenoasdifygpcrlxbkmjwqvz6758493021`-=[]\\;',./ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?"
+data.colemakchars = " ntesiraohdjglpufywqbkvmcxz6758493021`-=[]\\;',./ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?"
+data.chars = data.qwertychars;
+
 data.consecutive = 10;
 data.word_length = 7;
 
@@ -146,7 +149,7 @@ function render_word() {
         }
         word += "<span class='" + sclass + "'>";
         if(data.word[i] == " ") {
-            word += "&nbsp;"
+            word += "&#9141;"
         }
         else {
             word += data.word[i];
